@@ -1,0 +1,15 @@
+div.menuWhere {
+    display: none;
+}
+
+.ct-active {
+    color: #2e8ded;
+}
+
+div.ct-selected {
+    display: none;
+}
+
+label.error {
+    color: red;
+}
