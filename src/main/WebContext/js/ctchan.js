@@ -288,6 +288,7 @@ var CtChanWeChatMethod = {
     receiveWeChatMenu: function () {
         if (!CtChanWeChatMethod.accessToken) {
             CtChanMethod.MyAlert("请先获取授权");
+            $("#get").one("click", CtChanWeChatMethod.receiveWeChatMenu);
             return;
         }
         $.ajax({
@@ -299,6 +300,7 @@ var CtChanWeChatMethod = {
             }, success: function (data) {
                 CtChanMethod.MyAlert("读取菜单成功");
                 CtChanMethod.loadMenu(data);
+                $("#get").one("click", CtChanWeChatMethod.receiveWeChatMenu);
             }
         });
     },
@@ -324,7 +326,8 @@ var CtChanWeChatMethod = {
                     CtChanMethod.MyHint(JSON.stringify(data));
                     CtChanMethod.MyAlert(data.errcode + ":" + data.errmsg);
                 }
-            }
+                $("#authorize").one("click", CtChanWeChatMethod.authorize);
+            },
         })
     },
     createMenu: function (json) {
@@ -338,6 +341,12 @@ var CtChanWeChatMethod = {
             method: "POST",
             success: function (data) {
                 CtChanMethod.MyHint(JSON.stringify(data));
+                if (!data.errcode) {
+                    CtChanMethod.MyAlert("创建成功");
+                } else {
+                    CtChanMethod.MyAlert("创建失败:" + JSON.stringify(data));
+                }
+                $("#push").one("click", CtChanWeChatMethod.createWeChatMenu);
             }
         })
     }
@@ -389,9 +398,9 @@ $(function () {
             CtChanMethod.resetEditDiv();
         }
     });
-    $("#authorize").on("click", CtChanWeChatMethod.authorize);
-    $("#push").on("click", CtChanWeChatMethod.createWeChatMenu);
-    $("#get").on("click", CtChanWeChatMethod.receiveWeChatMenu);
+    $("#authorize").one("click", CtChanWeChatMethod.authorize);
+    $("#push").one("click", CtChanWeChatMethod.createWeChatMenu);
+    $("#get").one("click", CtChanWeChatMethod.receiveWeChatMenu);
     $("div#show span").on("click", CtChanMethod.intoEditDiv);
 
     jQuery.validator.addMethod("limit", function (value, element, params) {
